@@ -1,12 +1,6 @@
 export const initialState = {
-    basket: [
-        {
-        id:"19045609",
-        title:"2020 Apple MacBook Pro with Intel Processor (13-inch, 16GB RAM, 1TB SSD Storage) - Space Gray",
-        price:120.96,
-        rating:5,
-        image:"https://m.media-amazon.com/images/I/71bElkQQ7LL._AC_UY218_.jpg"
-    }]
+    basket: [],
+    user: null,
 };
 
 export const getBasketTotal = (basket)=>
@@ -16,6 +10,11 @@ export const getBasketTotal = (basket)=>
 const reducer =(state, action) => {
     console.log(action)
     switch (action.type){
+        case "SET_USER":
+            return{
+                ...state,
+                user: action.user 
+            }
         case 'ADD_TO_BASKET':
             //Logic for adding item to basket 
             return {

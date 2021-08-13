@@ -1,16 +1,47 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Header from "./components/Header";
 import Home from "./components/Home"
 import Checkout from "./components/Checkout";
 import Login from "./components/Login";
+import { useStateValue } from "./components/StateProvider";
+import { auth } from "./components/Firebase";
 import "./App.css";
 
 function App() {
+  const [{user}, dispatch ] = useStateValue();
+
+  //useEffect 
+  //Piece of code which runs based on a given condition 
+  useEffect(()=>{
+    const unsubscribe = auth.onAuthStateChanged((authUser)=>{
+      if(authUser) {
+        //user is logged in 
+        dispatch({
+          type: "SET_USER",
+          user:authUser,
+        })
+      } else{
+        //user is logged out 
+        dispatch({
+          type: "SET_USER",
+          user:null,
+        });
+
+      }
+    });
+    return () => {
+      unsubscribe();
+    }
+  }, [])
+
+  console.log("User is :",user)
+
   return (
     <Router>
       <div className="app">
         <Switch>
+
          <Route path="/checkout" >
            <Header/>
            <Checkout/>
@@ -18,7 +49,6 @@ function App() {
 
           <Route path="/login">
             <Login/>
-           
           </Route>
 
           <Route path="/">
